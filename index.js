@@ -5,7 +5,7 @@ const rl = readline.createInterface({
 });
 
 let
-  opts = ["Money", "Owned", "Dice", "AddP", "AddM", "DelM", "Exit"],
+  opts = ["Money", "Owned", "Dice", "AddP", "DelP", "AddM", "DelM", "Exit"],
   owned = [],
   money = 1500,
   funcs = {
@@ -39,7 +39,17 @@ let
         console.log(`Added: ${ans} to your owned list`);
         return run();
       });
-
+    },
+    "delp": () => {
+      rl.question("What property do you want to remove? ", ans => {
+        if (ans.trim().length <= 0 || owned.indexOf(`${ans[0].toUpperCase()}${ans.slice(1).toLowerCase()}`) < 0) {
+          console.log(`You do not own: ${ans}`);
+          return run();
+        }
+        owned.splice(owned.indexOf(`${ans[0].toUpperCase()}${ans.slice(1).toLowerCase()}`));
+        console.log(`Removed: ${ans} from your owned list`);
+        return run();
+      });
     },
     "dice": () => {
       console.log(`Rolled: ${funcs[0].roll()}`);
