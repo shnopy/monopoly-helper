@@ -5,7 +5,7 @@ const rl = readline.createInterface({
 });
 
 let
-  opts = ["Money", "Owned", "Dice", "AddP", "AddM", "Exit"],
+  opts = ["Money", "Owned", "Dice", "AddP", "AddM", "DelM", "Exit"],
   owned = [],
   money = 1500,
   funcs = {
@@ -16,6 +16,7 @@ let
     },
     "money": () => {
       console.log(`You own: $${money}`);
+      return run();
     },
     "addm": () => {
       rl.question("How much to add? ", ans => {
@@ -25,7 +26,7 @@ let
         }
         money += parseInt(ans);
         console.log(`Added: '${ans}' to balance`);
-
+        return run();
       });
     },
     "addp": () => {
@@ -36,17 +37,28 @@ let
         }
         owned.push(`${ans[0].toUpperCase()}${ans.slice(1).toLowerCase()}`);
         console.log(`Added: ${ans} to your owned list`);
-
+        return run();
       });
 
     },
     "dice": () => {
       console.log(`Rolled: ${funcs[0].roll()}`);
-
+      return run();
     },
     "owned": () => {
       console.log(`You own:\n${owned.join(", ")}\n`);
-
+      return run();
+    },
+    "delm": () => {
+      rl.question("How much to remove? ", ans => {
+        if (isNaN(parseInt(ans))) {
+          console.log(`'${ans}' Is not a valid int!`);
+          return run();
+        }
+        money -= parseInt(ans);
+        console.log(`Removed: '${ans}' from balance`);
+        return run();
+      });
     },
     "exit": () => rl.close()
   };
@@ -57,7 +69,6 @@ const run = () => {
     try {
       let answer = opts.find(e => e.toLowerCase() === ans.toLowerCase()).toLowerCase();
       funcs[answer]();
-      return run();
     } catch {
       console.log(`Option: '${ans}' Does not exist!`);
       return run();
